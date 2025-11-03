@@ -1,5 +1,10 @@
 package users;
 
 public class ContentAdmin extends User {
-    private String editPermissions;
+    private int editPermissions;
+
+    public ContentAdmin(String name, String password, String email, int editPermissions) {
+        super(name, password, email);
+        this.editPermissions = editPermissions;
+    }
 }

@@ -1,25 +1,28 @@
 package users;
 
-public class User {
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public abstract class User {
     private static long counter = 0;
     private long id;
-    private String name;
-    private String passwordHash;
+    private String username;
+    private String password;
     private String email;
     private String role;
     private String registeredDate;
-    private String stateOfAccount;
+    private boolean stateOfAccount;
 
     //Constructors
 
-    public User(String name, String passwordHash, String email, String role, String registeredDate, String stateOfAccount) {
+    public User(String name, String password, String email) {
         this.id = counter++;
-        this.name = name;
-        this.passwordHash = passwordHash;
+        this.username = name;
+        this.password = password;
         this.email = email;
-        this.role = role;
-        this.registeredDate = registeredDate;
-        this.stateOfAccount = stateOfAccount;
+        this.role = getClass().getSimpleName();
+        this.registeredDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        this.stateOfAccount = true;
     }
 
     public User() {

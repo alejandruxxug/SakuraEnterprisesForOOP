@@ -1,4 +1,4 @@
-package users.Clients;
+package clients;
 
 public class PaymentMethod {
     private static long counter = 0;

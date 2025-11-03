@@ -1,7 +1,6 @@
-package users.Clients;
+package clients;
 
 import users.User;
-
 import java.util.ArrayList;
 
 public class Client extends User {
