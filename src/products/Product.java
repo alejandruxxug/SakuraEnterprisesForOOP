@@ -1,5 +1,7 @@
 package products;
 
+import exceptions.DuplicateProduct;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -11,15 +13,17 @@ public class Product {
     private double price;
     private int stock;
     private String launchDate;
+    private Category category;
 
-    public Product(String name, String description, double price, int stock, int launchDate) {
+    public Product(String name, String description, double price, int stock, Category category) {
         counter++;
         id = counter;
-        this.name = name;
+        this.name = name.toLowerCase();
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.launchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        this.category = category;
     }
 
 
@@ -44,7 +48,11 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws DuplicateProduct {
+        if (name.equals("")) {
+            throw new DuplicateProduct("Product name is empty");
+        }
+
         this.name = name;
     }
 
@@ -78,5 +86,10 @@ public class Product {
 
     public void setLaunchDate(String launchDate) {
         this.launchDate = launchDate;
+    }
+
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -2,7 +2,10 @@ import classified.ShadowCommittee;
 import clients.Client;
 import enums.AccessLevel;
 import exceptions.*;
+import products.Category;
+import products.Product;
 import services.AuthService;
+import services.ProductService;
 import users.*;
 
 import java.util.Scanner;
@@ -12,6 +15,7 @@ public class Main {
     //Hi seb! How's your day!!1 im doing this proyect solo so i dont think i will finish it fully but im trying
 
     static AuthService Auth = new AuthService();
+    static ProductService ProductsCategoriess = ProductService.getInstance();
     static ShadowCommittee Shadow = new ShadowCommittee();
     static User loggedUser;
     static AccessLevel userAccessLevel;
@@ -167,11 +171,19 @@ public class Main {
     }
 
     public static void productDeveloperMenu() {
-        System.out.println("==========Logged in as:==========");
-        System.out.println("=========="+loggedUser.getRole()+"==========");
-        System.out.println("Welcome " +loggedUser.getUsername());
-        System.out.println("1. Create a new Product");
-        System.out.println("0. Logout");
+        productDeveloperLoop:
+        while (true) {
+            System.out.println("==========Logged in as:==========");
+            System.out.println("=========="+loggedUser.getRole()+"==========");
+            System.out.println("Welcome " +loggedUser.getUsername());
+            System.out.println("1. Create a new Product");
+            System.out.println("0. Logout");
+
+
+            switch (Integer.parseInt(sc.nextLine())) {}
+        }
+
+
 
     }
 
@@ -444,8 +456,8 @@ public class Main {
             System.out.println("Welcome " +loggedUser.getUsername());
             System.out.println("1. Create a new Product");
             System.out.println("2. Edit a Product");
-            System.out.println("3. Update a Product");
-            System.out.println("4. Remove a Product");
+            System.out.println("3. Remove a Product");
+            System.out.println("5. Create a new Category");
             shadowCommitteeMenu(accessLevel);
 
             System.out.println("0. Logout");
@@ -453,12 +465,129 @@ public class Main {
             int input = Integer.parseInt(sc.nextLine());
 
             if (input == 1) {
+                System.out.println("Product Creation!");
+                System.out.println("Please enter the product name");
+                String productName = sc.nextLine();
+                System.out.println("Please enter the product description");
+                String productDescription = sc.nextLine();
+                System.out.println("Please enter the product price");
+                double productPrice = Double.parseDouble(sc.nextLine());
+                System.out.println("Please enter the initial Stock");
+                int initialStock = Integer.parseInt(sc.nextLine());
+                Category c;
+
+                productCategoryLoop:
+                while (true) {
+                    System.out.println("Please enter the product category");
+                    String productCategory = sc.nextLine();
+
+                    try {
+                        c = ProductsCategoriess.searchCategory(productCategory);
+                        System.out.println("Category found successfully");
+                        break productCategoryLoop;
+                    } catch (MatchingCategoryNotFound e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+
+                try {
+                    Product p = new Product(productName, productDescription, productPrice, initialStock, c);
+                    ProductsCategoriess.addProduct(p);
+                    System.out.println("Product created successfully");
+                } catch (DuplicateProduct e) {
+                    System.out.println(e.getMessage());
+                }
+
 
             } else if (input == 2) {
+                System.out.println("Product Edition!");
+                System.out.println("Please enter the product name");
+                String productName = sc.nextLine();
+                Product p = null;
+
+                try {
+                    p = ProductsCategoriess.seachProduct(productName);
+                    System.out.println("Product found successfully");
+                } catch (MatchingProductNotFound e) {
+                    System.out.println(e.getMessage());
+                }
+
+                contentAdminEditLoop:
+                while (true) {
+                    System.out.println("1. Edit product name");
+                    System.out.println("2. Edit product description");
+                    System.out.println("3. Edit product price");
+                    System.out.println("4. Add stock to the current product");
+                    System.out.println("5. Change category");
+                    System.out.println("0. Cancel Operation");
+
+                    input = Integer.parseInt(sc.nextLine());
+                    switch (input) {
+                        case 1:
+                            System.out.println("Enter the new product name");
+                            String newProductName = sc.nextLine();
+
+                            try {
+                                for (Product product : ProductService.Products) {
+                                    if (product.getName().equals(newProductName)) {
+                                        throw new DuplicateProduct("Product name already exists");
+                                    }
+                                }
+                                p.setName(newProductName);
+                                System.out.println("Product edited successfully");
+
+                            }catch (DuplicateProduct e){
+                                System.out.println(e.getMessage());
+                            }
+                        break contentAdminEditLoop;
+
+                        case 2:
+                            System.out.println("Enter the new product description");
+                            String newProductDescription = sc.nextLine();
+                            p.setDescription(newProductDescription);
+                            System.out.println("Product edited successfully");
+                        break contentAdminEditLoop;
+                        case 3:
+                            System.out.println("Enter the new product price");
+                            double newProductPrice = Double.parseDouble(sc.nextLine());
+                            p.setPrice(newProductPrice);
+                            System.out.println("Product edited successfully");
+                            break contentAdminEditLoop;
+                        case 4:
+                            System.out.println("Add stock to the current product");
+                            int newProductStock = Integer.parseInt(sc.nextLine());
+                            p.setStock(newProductStock+p.getStock()); // adds stock to the current stock
+                            System.out.println("Product edited successfully");
+                        break contentAdminEditLoop;
+                        case 5:
+                            System.out.println("Enter the new product category");
+                            String newProductCategory = sc.nextLine();
+                            Category newCategory;
+
+                            try {
+                                newCategory = ProductsCategoriess.searchCategory(newProductCategory);
+                                p.setCategory(newCategory);
+                                System.out.println("Category changed successfully");
+
+                            } catch (MatchingCategoryNotFound e) {
+                                System.out.println(e.getMessage());
+                            }
+                            break contentAdminEditLoop;
+
+                        case 0:
+                            System.out.println("Exiting editing");
+                        break contentAdminLoop;
+
+                        default:
+                                System.out.println("Invalid input please try again sybau");
+                        break;
+                    }
+                }
+
+
 
             } else if (input == 3) {
 
-            } else if (input == 4) {
 
             }else if (input == 0) {
                 logout();
