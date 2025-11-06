@@ -15,6 +15,9 @@ public class ShadowCommittee {
 
     public ShadowCommittee() throws InvalidUserTypeForShadowComitee {
         //Example data
+        Sakura sakura = Sakura.getInstance();
+        ShadowCommittee.add(sakura); //Sakura is part of all shadows committee (supposed to be multiple shadow committees)
+
     }
 
     public void addUser(User user) throws InvalidUserTypeForShadowComitee {
@@ -23,6 +26,12 @@ public class ShadowCommittee {
        } else  {
            throw new InvalidUserTypeForShadowComitee("Invalid user type, it has to be a ContentAdmin, UserAdmin or Sakura");
        }
+    }
+
+    public void listUsers() {
+        for (User user : ShadowCommittee) {
+            System.out.println(user.getUsername() + " " + user.getEmail() + " " + user.getRole());
+        }
     }
 
     public void removeUser(String username, AuthService Auth) throws InvalidUserTypeForShadowComitee {
@@ -40,7 +49,6 @@ public class ShadowCommittee {
                 return true;
             }
         }
-
         throw new MatchingUsernameNotFound("No member found for username " + username);
 
     }
@@ -53,5 +61,6 @@ public class ShadowCommittee {
         }
         throw new MatchingUsernameNotFound("User not found for this username " + username);
     }
+
 
 }

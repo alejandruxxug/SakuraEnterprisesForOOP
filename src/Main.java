@@ -447,7 +447,6 @@ public class Main {
             }else if (input == 0) {
                 logout();
                 break contentAdminLoop;
-
             } else if (AccessLevel.ADMIN == accessLevel || AccessLevel.VIEW == accessLevel) {
                 shadowCommitteeOptionMenu(accessLevel, input);
             } else {
@@ -492,13 +491,42 @@ public class Main {
 
     public static void shadowCommitteeOptionMenu(AccessLevel accessLevel,int input) {
         if (input == 11 && (accessLevel.ADMIN == accessLevel )) {
-
+            Shadow.listUsers();
         } else if (input == 22 && accessLevel.ADMIN == accessLevel) {
+            System.out.println("User Addition to Shadow Committee");
+            System.out.println("Enter the members username");
+            String usernameToAdd = sc.nextLine();
+
+            try {
+                User userToAdd = Auth.searchUsername(usernameToAdd);
+                Shadow.addUser(userToAdd);
+                System.out.println(userToAdd.getUsername() + " added successfully");
+            } catch (MatchingUsernameNotFound e) {
+                System.out.println(e.getMessage());
+            } catch (SakuraIsAllPower e) {}
 
         } else if (input == 33 && accessLevel.ADMIN == accessLevel) {
+            System.out.println("User deletion from Shadow Commitee");
+            System.out.println("Enter the members username: ");
+            String usernameToRemove = sc.nextLine();
+            try {
+                Shadow.removeUser(usernameToRemove, Auth);
+            } catch (MatchingUsernameNotFound e) {
+                System.out.println(e.getMessage());
+            } catch (InvalidUserTypeForShadowComitee e) {
+                System.out.println(e.getMessage());
+            }
 
         } else if (input == 44 && accessLevel.ADMIN == accessLevel) {
-
+            System.out.println("User search!");
+            System.out.println("Enter the members username: ");
+            String usernameToSearch = sc.nextLine();
+            try {
+                User userToSearch = Shadow.getMember(usernameToSearch);
+                System.out.println(userToSearch.getUsername() + " found successfully in Shadow Committee");
+            } catch (MatchingUsernameNotFound e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 

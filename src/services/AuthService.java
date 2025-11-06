@@ -12,7 +12,7 @@ public class AuthService {
     private ArrayList<User> users = new ArrayList<>();
 
     public AuthService() throws DuplicateUserData {
-        Sakura sakura = new Sakura("Sakura-San", "sakurapetals", "sakura@gmail.com", 1234567890);
+        Sakura sakura = Sakura.getInstance();
         ProductDeveloper pd1 = new ProductDeveloper("mrdaniel", "daniel", "daniel@gmail.com", "MakeUp");
         UserAdmin ua = new UserAdmin("admin", "admin", "admin@gmail.com", AccessLevel.ADMIN);
         ContentAdmin ca= new ContentAdmin("cadmin", "cadmin", "cadmin@gmail.com", AccessLevel.ADMIN);
