@@ -1,8 +1,6 @@
 package services;
 
-import exceptions.DuplicateProduct;
-import exceptions.DuplicateUserData;
-import exceptions.MatchingCategoryNotFound;
+import exceptions.*;
 import products.Category;
 import products.Product;
 import users.Sakura;
@@ -27,16 +25,16 @@ public class ProductService {
                 return c;
             }
         }
-        throw new RuntimeException("Category not found");
+        throw new MatchingCategoryNotFound("Category not found");
     }
 
-    public Product seachProduct(String name) throws MatchingCategoryNotFound {
+    public Product seachProduct(String name) throws MatchingProductNotFound {
         for (Product p : Products){
             if (name.toLowerCase().equals(p.getName())){
                 return p;
             }
         }
-        throw new RuntimeException("Product not found");
+        throw new MatchingProductNotFound("Product not found");
     }
 
 
@@ -55,6 +53,21 @@ public class ProductService {
         }
         Products.add(p);
     }
+
+    public void addCategory(Category c) throws DuplicateCategory {
+        for (Category category : Categories){
+            if (category.getName().equals(c.getName())){
+                throw new DuplicateCategory("Category with that exact name already exists");
+            }
+        }
+        Categories.add(c);
+    }
+
+    public void deleteProduct(Product p) {
+        Products.remove(p);
+    }
+
+
 
 }
 

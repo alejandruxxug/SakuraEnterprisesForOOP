@@ -12,7 +12,9 @@ import java.util.Scanner;
 
 public class Main {
 
-    //Hi seb! How's your day!!1 im doing this proyect solo so i dont think i will finish it fully but im trying
+    // Alejo 8 hours ago -> Hi seb! How's your day!!1 im doing this project solo so i don't think i will finish it fully but im trying
+
+    //This is Alejo from the future and i in fact didn't finish it Slave interaction from sakura isnt fully done and client workflow isnt used
 
     static AuthService Auth = new AuthService();
     static ProductService ProductsCategoriess = ProductService.getInstance();
@@ -99,8 +101,11 @@ public class Main {
                 //Has a client class - open client menu to purchase TODO
                 if (loggedUser instanceof Client client) {
                     clientMenu();
+                    System.out.println("Not Finished - going back!");
+                    logout();
+
                 }
-                //Product developer goes to publish products TODO
+
                 else if (loggedUser instanceof ProductDeveloper productDeveloper) {
                     productDeveloperMenu();
                 }
@@ -117,7 +122,6 @@ public class Main {
                 }
                 // Sakura option (last because least probable to access the system) // Also give them the perspective of each user type
                 else if (loggedUser instanceof Sakura sakura) {
-                    // todo add al functionality 1/3
 
                     sakuraLoop:
                     while (true) {
@@ -136,7 +140,10 @@ public class Main {
 
                             case 3:
                                 userAdminMenu(AccessLevel.ADMIN);
+                            break;
 
+                            case 4:
+                                System.out.println("Not Finished - going back!");
                             break;
 
                             case 0:
@@ -179,8 +186,48 @@ public class Main {
             System.out.println("1. Create a new Product");
             System.out.println("0. Logout");
 
+            int input = Integer.parseInt(sc.nextLine());
 
-            switch (Integer.parseInt(sc.nextLine())) {}
+            switch (input) {
+                case 1:
+                    System.out.println("Product Creation!");
+                    System.out.println("Please enter the product name");
+                    String productName = sc.nextLine();
+                    System.out.println("Please enter the product description");
+                    String productDescription = sc.nextLine();
+                    System.out.println("Please enter the product price");
+                    double productPrice = Double.parseDouble(sc.nextLine());
+                    System.out.println("Please enter the initial Stock");
+                    int initialStock = Integer.parseInt(sc.nextLine());
+                    Category c;
+
+                    productCategoryLoop:
+                    while (true) {
+                        System.out.println("Please enter the product category");
+                        String productCategory = sc.nextLine();
+
+                        try {
+                            c = ProductsCategoriess.searchCategory(productCategory);
+                            System.out.println("Category found successfully");
+                            break productCategoryLoop;
+                        } catch (MatchingCategoryNotFound e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+
+                    try {
+                        Product p = new Product(productName, productDescription, productPrice, initialStock, c);
+                        ProductsCategoriess.addProduct(p);
+                        System.out.println("Product created successfully");
+                    } catch (DuplicateProduct e) {
+                        System.out.println(e.getMessage());
+                    }
+                break;
+                case 0:
+                    logout();
+                    break productDeveloperLoop;
+
+            }
         }
 
 
@@ -457,7 +504,7 @@ public class Main {
             System.out.println("1. Create a new Product");
             System.out.println("2. Edit a Product");
             System.out.println("3. Remove a Product");
-            System.out.println("5. Create a new Category");
+            System.out.println("4. Create a new Category");
             shadowCommitteeMenu(accessLevel);
 
             System.out.println("0. Logout");
@@ -584,12 +631,37 @@ public class Main {
                     }
                 }
 
-
-
             } else if (input == 3) {
+                System.out.println("Enter the new product to delete (THIS ACTION IS PERMANENT)");
+                String newProductName = sc.nextLine();
+                Product p = null;
 
+                try {
+                    p = ProductsCategoriess.seachProduct(newProductName);
+                    System.out.println("Product found successfully");
+                    ProductsCategoriess.deleteProduct(p);
+                    System.out.println("Product deleted successfully");
+                } catch (MatchingProductNotFound e) {
+                    System.out.println(e.getMessage());
+                }
 
-            }else if (input == 0) {
+            } else if (input == 4) {
+
+                System.out.println("Enter the new category name");
+                String newCategoryName = sc.nextLine();
+                System.out.println("Enter the new category description");
+                String newCategoryDescription = sc.nextLine();
+
+                try {
+                    Category c = new Category(newCategoryName, newCategoryDescription);
+                    ProductsCategoriess.addCategory(c);
+                    System.out.println("Category added successfully");
+                } catch (DuplicateCategory e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
+            if (input == 0) {
                 logout();
                 break contentAdminLoop;
             } else if (AccessLevel.ADMIN == accessLevel || AccessLevel.VIEW == accessLevel) {
