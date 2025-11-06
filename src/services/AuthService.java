@@ -33,13 +33,17 @@ public class AuthService {
         users.add(user);
     }
 
+    public void removeUser(User user) {
+        users.remove(user);
+    }
+
     public User login(String username, String password) throws InvalidLogin {
         for (User u : users) {
-            if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(password) && u.isStateOfAccount() == true) {
                 return u;
             }
         }
-            throw new InvalidLogin("Invalid username or password");
+            throw new InvalidLogin("Invalid username, password or inactivated account");
     }
 
     public User searchUsername(String username) throws MatchingUsernameNotFound {
