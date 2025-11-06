@@ -79,7 +79,7 @@ After login, the app checks what type of user you are and sends you to a specifi
 
 ---
 
-## What’s intentionally unfinished 🧩
+## What’s unintentionally :( unfinished 🧩
 
 Some things are **deliberately left as “work in progress”**: Sorry zapata for letting you down!
 
