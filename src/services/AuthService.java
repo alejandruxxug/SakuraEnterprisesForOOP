@@ -39,7 +39,7 @@ public class AuthService {
 
     public User login(String username, String password) throws InvalidLogin {
         for (User u : users) {
-            if (u.getUsername().equals(username) && u.getPassword().equals(password) && u.isStateOfAccount() == true) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(password) && u.isStateOfAccount()) {
                 return u;
             }
         }

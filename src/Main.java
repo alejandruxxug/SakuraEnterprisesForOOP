@@ -3,7 +3,6 @@ import clients.Client;
 import enums.AccessLevel;
 import exceptions.*;
 import services.AuthService;
-import classified.ShadowCommittee;
 import users.*;
 
 import java.util.Scanner;
@@ -120,11 +119,25 @@ public class Main {
                     while (true) {
                         sakuraMenu();
 
-                        switch (option = Integer.parseInt(sc.nextLine())) {
+                        option = Integer.parseInt(sc.nextLine());
+
+                        switch (option) {
                             case 1:
-                                userAdminMenu(userAccessLevel);
+                                productDeveloperMenu();
                             break;
 
+                            case 2:
+                                contentAdminMenu(AccessLevel.ADMIN);
+                            break;
+
+                            case 3:
+                                userAdminMenu(AccessLevel.ADMIN);
+
+                            break;
+
+                            case 0:
+                                logout();
+                                break sakuraLoop;
                         }
                     }
                 }
@@ -157,7 +170,7 @@ public class Main {
         System.out.println("==========Logged in as:==========");
         System.out.println("=========="+loggedUser.getRole()+"==========");
         System.out.println("Welcome " +loggedUser.getUsername());
-        System.out.println("1. Create a new product");
+        System.out.println("1. Create a new Product");
         System.out.println("0. Logout");
 
     }
@@ -169,6 +182,7 @@ public class Main {
 
         userAdminLoop:
         while(true){
+
             System.out.println("==========Logged in as:==========");
             System.out.println("=========="+loggedUser.getRole()+"==========");
             System.out.println("Welcome " +loggedUser.getUsername());
@@ -194,7 +208,7 @@ public class Main {
 
                 inputSwitch = Integer.parseInt(sc.nextLine());
 
-                switch(input) {
+                switch(inputSwitch) {
                     case 1:
                         System.out.println("User Administration account ");
                         if (AccessLevel.ADMIN.equals(accessLevel)) {
@@ -306,7 +320,6 @@ public class Main {
                                     try {
                                         ContentAdmin uA = new ContentAdmin(username, password, email, AccessLevel.NOACCESS);
                                         Auth.addUser(uA);
-
                                         System.out.println("Content Successfully Created");
                                     } catch (InvalidRegistrationData e) {
                                         System.out.println(e.getMessage());
@@ -429,10 +442,10 @@ public class Main {
             System.out.println("==========Logged in as:==========");
             System.out.println("=========="+loggedUser.getRole()+"==========");
             System.out.println("Welcome " +loggedUser.getUsername());
-            System.out.println("1. Create a new product");
-            System.out.println("2. Edit a product");
-            System.out.println("3. Update a product");
-            System.out.println("4. Remove a product");
+            System.out.println("1. Create a new Product");
+            System.out.println("2. Edit a Product");
+            System.out.println("3. Update a Product");
+            System.out.println("4. Remove a Product");
             shadowCommitteeMenu(accessLevel);
 
             System.out.println("0. Logout");
@@ -468,7 +481,6 @@ public class Main {
         System.out.println("2. Content Administration");
         System.out.println("3. User Administration");
         System.out.println("4. Slave Registry");
-        shadowCommitteeMenu(AccessLevel.ADMIN);
         System.out.println("0. Logout");
 
     }
@@ -513,7 +525,7 @@ public class Main {
             System.out.println("Enter the members username: ");
             String usernameToRemove = sc.nextLine();
             try {
-                Shadow.removeUser(usernameToRemove, Auth);
+                Shadow.removeUser(usernameToRemove);
             } catch (MatchingUsernameNotFound e) {
                 System.out.println(e.getMessage());
             } catch (InvalidUserTypeForShadowComitee e) {
@@ -533,14 +545,10 @@ public class Main {
         }
     }
 
-
     public static void logout() {
         System.out.println("==========Logging out!==========");
         finishedLogin = false;
 
     }
-
-
-
 
 }

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import exceptions.InvalidUserTypeForShadowComitee;
 import exceptions.MatchingUsernameNotFound;
+import exceptions.SakuraIsAllPower;
 import services.AuthService;
 import users.*;
 
@@ -34,13 +35,17 @@ public class ShadowCommittee {
         }
     }
 
-    public void removeUser(String username, AuthService Auth) throws InvalidUserTypeForShadowComitee {
-        Auth.searchUsername(username);
+    public void removeUser(String username) throws SakuraIsAllPower{
         for(User user : ShadowCommittee) {
             if(user.getUsername().equals(username)) {
-                Auth.removeUser(user);
+                if (user instanceof Sakura) {
+                    throw new SakuraIsAllPower("Sakura is all powerful you cant remove her !");
+                }
+                ShadowCommittee.remove(user);
+                break;
             }
         }
+
     }
 
     public boolean isMember(String username) throws MatchingUsernameNotFound {
