@@ -62,7 +62,10 @@ public abstract class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password)  throws InvalidRegistrationData {
+        if (password.length() < 4) {
+            throw new InvalidRegistrationData("Password length must be at least 4 characters");
+        }
         this.password = password;
     }
 
