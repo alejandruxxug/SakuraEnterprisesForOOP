@@ -9,6 +9,9 @@ import users.*;
 import java.util.Scanner;
 
 public class Main {
+
+    //Hi seb! How's your day!!1 im doing this proyect solo so i dont think i will finish it fully but im trying
+
     static AuthService Auth = new AuthService();
     static ShadowCommittee Shadow = new ShadowCommittee();
     static User loggedUser;
